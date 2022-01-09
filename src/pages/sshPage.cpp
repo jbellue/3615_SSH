@@ -49,14 +49,19 @@ MenuItem SSHPage::run() {
             }
             break;
         case STATE_DONE:
-            if(_sshClient) {
-                _sshClient->cleanup();
-                delete _sshClient;
-            }
-            _minitel->modeVideotex();
+            cleanup();
             return MenuItem::MenuOutput_HOME;
     }
     return MenuItem::MenuOutput_NONE;
+}
+
+void SSHPage::cleanup() {
+    if(_sshClient) {
+        _sshClient->cleanup();
+        delete _sshClient;
+    }
+    _minitel->modeVideotex();
+    _minitel->echo(true);
 }
 
 void SSHPage::showPage() {
