@@ -1,56 +1,55 @@
 #include "WiFiMenu.h"
 #include <string>
 
-void WiFiMenu::run() {
-    while(true) {
-        switch (_state) {
-            case STATE_NEW:
-                showPage();
-                _state = STATE_WAITING_FOR_INPUT;
-                break;
-            case STATE_WAITING_FOR_INPUT: {
-                unsigned long input = getInput();
-                if (input == ENVOI) {
-                    _state = STATE_CHECK_INPUT;
-                    _minitel->moveCursorReturn(1);
-                    _minitel->noCursor();
+MenuItem WiFiMenu::run() {
+    switch (_state) {
+        case STATE_NEW:
+            showPage();
+            _state = STATE_WAITING_FOR_INPUT;
+            break;
+        case STATE_WAITING_FOR_INPUT: {
+            unsigned long input = getInput();
+            if (input == ENVOI) {
+                _state = STATE_CHECK_INPUT;
+                _minitel->moveCursorReturn(1);
+                _minitel->noCursor();
+            }
+            else if (input == SOMMAIRE) {
+                _state = STATE_DONE;
+            }
+        }
+        break;
+        case STATE_CHECK_INPUT: {
+            const uint8_t action = checkInput();
+            if (!action) {
+                _state = STATE_NEW;
+            }
+            else {
+                if(_page == PAGE_SELECT_NETWORK) {
+                    _ssid = WiFi.SSID(action - 1);
+                    _authMode = WiFi.encryptionType(action - 1);
+                    _channel = WiFi.channel(action - 1);
+                    _state = STATE_ENTER_PASSWORD;
                 }
-                else if (input == SOMMAIRE) {
-                    _state = STATE_DONE;
+                else if(_page == PAGE_NO_NETWORK_FOUND) {
+                    _state = STATE_NEW;
+                }
+                else { // PAGE_DISCONNECT
+                    WiFi.disconnect();
+                    _minitel->println("Déconnexion...");
+                    while(WiFi.isConnected()); // wait for disconnection
+                    _state = STATE_NEW;
                 }
             }
             break;
-            case STATE_CHECK_INPUT: {
-                const uint8_t action = checkInput();
-                if (!action) {
-                    _state = STATE_NEW;
-                }
-                else {
-                    if(_page == PAGE_SELECT_NETWORK) {
-                        _ssid = WiFi.SSID(action - 1);
-                        _authMode = WiFi.encryptionType(action - 1);
-                        _channel = WiFi.channel(action - 1);
-                        _state = STATE_ENTER_PASSWORD;
-                    }
-                    else if(_page == PAGE_NO_NETWORK_FOUND) {
-                        _state = STATE_NEW;
-                    }
-                    else { // PAGE_DISCONNECT
-                        WiFi.disconnect();
-                        _minitel->println("Déconnexion...");
-                        while(WiFi.isConnected()); // wait for disconnection
-                        _state = STATE_NEW;
-                    }
-                }
-                break;
-            }
-            case STATE_ENTER_PASSWORD:
-                passwordForm();
-                break;
-            case STATE_DONE:
-                return;
         }
+        case STATE_ENTER_PASSWORD:
+            passwordForm();
+            break;
+        case STATE_DONE:
+            return MenuItem::MenuOutput_HOME;
     }
+    return MenuItem::MenuOutput_NONE;
 }
 
 static uint8_t connectionStatus;

@@ -7,7 +7,8 @@
 typedef enum {
     STATE_NEW,
     STATE_WIFI_MENU,
-    STATE_SSH_DETAILS,
+    STATE_HOME,
+    STATE_LANGUAGE
 } state_t;
 
 #endif

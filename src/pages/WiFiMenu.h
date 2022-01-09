@@ -17,7 +17,7 @@ public:
         _state(STATE_NEW),
         _input('\0') { _connectionRetryCount = 0; }
 
-    void run();
+    MenuItem run();
 
 private:
     void showPage();

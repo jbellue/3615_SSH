@@ -20,7 +20,7 @@ void handleStateNew(Minitel* minitel) {
     vTaskDelay(NET_WAIT_MS / portTICK_PERIOD_MS);
 
     if(WiFi.isConnected()) {
-        newState(STATE_SSH_DETAILS);
+        newState(STATE_HOME);
     }
     else {
         unsigned long length = 0;
@@ -29,23 +29,12 @@ void handleStateNew(Minitel* minitel) {
             length = millis() - time;
         }
         if(WiFi.isConnected()) {
-            newState(STATE_SSH_DETAILS);
+            newState(STATE_HOME);
         }
         else {
             newState(STATE_WIFI_MENU);
         }
     }
-}
-
-void handleWiFiMenu(Minitel* minitel) {
-    WiFiMenu *w = new WiFiMenu(minitel);
-    w->run();
-    newState(STATE_SSH_DETAILS);
-}
-
-void handleSSHDetails(Minitel* minitel) {
-    SSHPage *p = new SSHPage(minitel);
-    p->run();
 }
 
 void controlTask(void *pvParameter) {
@@ -59,14 +48,35 @@ void controlTask(void *pvParameter) {
             case STATE_NEW:
                 handleStateNew(&minitel);
                 break;
-            case STATE_SSH_DETAILS:
-                handleSSHDetails(&minitel);
+            case STATE_HOME:
+                page = std::unique_ptr<Page>(new SSHPage(&minitel));
                 break;
             case STATE_WIFI_MENU:
-                handleWiFiMenu(&minitel);
+                page = std::unique_ptr<Page>(new WiFiMenu(&minitel));
                 break;
             default:
                 break;
+        }
+        if (page) {
+            MenuItem ret;
+            do {
+                ret = page->run();
+            }
+            while(ret == MenuItem::MenuOutput_NONE);
+            switch (ret) {
+                case MenuItem::MenuOutput_WIFI_MENU:
+                    newState(STATE_WIFI_MENU);
+                    break;
+                case MenuItem::MenuOutput_HOME:
+                    newState(STATE_HOME);
+                    break;
+                case MenuItem::MenuOutput_LANGUAGE:
+                    newState(STATE_LANGUAGE);
+                    break;
+                default:
+                    // ignore
+                    break;
+            }
         }
     }
 }

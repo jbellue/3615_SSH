@@ -11,7 +11,7 @@ public:
         Page {m},
         _state(STATE_NEW),
         _sshClient(NULL) { }
-    void run();
+    MenuItem run();
 
 private:
     enum Input {
