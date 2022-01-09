@@ -2,6 +2,7 @@
 #include <WiFi.h>
 #include "pages/WiFiMenu.h"
 #include "pages/sshPage.h"
+#include "pages/languageSelection.h"
 
 #define NET_WAIT_MS 100
 
@@ -53,6 +54,9 @@ void controlTask(void *pvParameter) {
                 break;
             case STATE_WIFI_MENU:
                 page = std::unique_ptr<Page>(new WiFiMenu(&minitel));
+                break;
+            case STATE_LANGUAGE:
+                page = std::unique_ptr<Page>(new LanguageSelection(&minitel));
                 break;
             default:
                 break;

@@ -16,11 +16,14 @@ public:
 private:
     enum Input {
         INPUT_ENVOI,
-        INPUT_SOMMAIRE
+        INPUT_SOMMAIRE,
+        INPUT_GUIDE
     };
     void showPage();
     void clearFields();
     Input getInput();
+    void displayBottomMenu();
+    void cleanup();
 
     enum State {
         STATE_NEW,

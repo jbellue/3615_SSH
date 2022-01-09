@@ -14,7 +14,12 @@ MenuItem SSHPage::run() {
                 _state = STATE_CONNECTING;
             }
             else if (i == INPUT_SOMMAIRE) {
-                _state = STATE_DONE;
+                cleanup();
+                return MenuItem::MenuOutput_WIFI_MENU;
+            }
+            else if (i == INPUT_GUIDE) {
+                cleanup();
+                return MenuItem::MenuOutput_LANGUAGE;
             }
             break;
         }
@@ -90,6 +95,9 @@ void SSHPage::showPage() {
     _minitel->repeat(39);
     _minitel->moveCursorLeft(40);
     _minitel->cursor();
+
+    displayBottomMenu();
+
     _minitel->moveCursorXY(0, 7);
 }
 
@@ -103,7 +111,7 @@ SSHPage::Input SSHPage::getInput() {
     unsigned long key = _minitel->getKeyCode();
     _field = FIELD_HOST;
     uint8_t x, y = 0;
-    while(key != ENVOI && key != SOMMAIRE) {
+    while(key != ENVOI && key != SOMMAIRE && key != GUIDE) {
         switch (key) {
             case RETOUR:
                 switch (_field) {
@@ -177,8 +185,23 @@ SSHPage::Input SSHPage::getInput() {
     switch (key) {
         case ENVOI:
             return INPUT_ENVOI;
+        case GUIDE:
+            return INPUT_GUIDE;
         case SOMMAIRE:
         default:
             return INPUT_SOMMAIRE;
     }
+}
+
+void SSHPage::displayBottomMenu() {
+    _minitel->moveCursorXY(0, 23);
+    _minitel->attributs(INVERSION_FOND);
+    _minitel->print("Sommaire");
+    _minitel->attributs(FOND_NORMAL);
+    _minitel->println(" : Options WiFi");
+
+    _minitel->attributs(INVERSION_FOND);
+    _minitel->print("Guide");
+    _minitel->attributs(FOND_NORMAL);
+    _minitel->println(" : Language");
 }
