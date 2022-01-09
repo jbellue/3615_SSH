@@ -1,4 +1,5 @@
 #include "languageSelection.h"
+#include <Preferences.h>
 
 LanguageSelection::LanguageSelection(Minitel* m) :
     Page {m} {
@@ -15,6 +16,8 @@ MenuItem LanguageSelection::run() {
     case STATE_WAITING_FOR_INPUT: {
         Languages i = getInput();
         if (i != LANGUAGES_LAST) {
+            extern Preferences preferences;
+            preferences.putUShort("language_index", (uint16_t)i);
             l10n.setLanguage(i);
             _minitel->echo(true);
             return MenuItem::MenuOutput_HOME;

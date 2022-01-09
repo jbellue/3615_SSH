@@ -1,5 +1,6 @@
 #include "main.h"
 #include <WiFi.h>
+#include <Preferences.h>
 #include "l10n.h"
 #include "pages/WiFiMenu.h"
 #include "pages/sshPage.h"
@@ -12,6 +13,7 @@ const unsigned int configSTACK = 51200;
 
 static volatile state_t state;
 
+Preferences preferences;
 L10n l10n;
 
 void newState(const state_t s) {
@@ -44,8 +46,7 @@ void handleStateNew(Minitel* minitel) {
 void controlTask(void *pvParameter) {
     Minitel minitel = Minitel(Serial);
 
-    // set spanish for now, needs to get it from preferences
-    l10n.setLanguage(Languages::SPANISH);
+    l10n.setLanguage((Languages)preferences.getUShort("language_index", 0));
 
     vTaskDelay(NET_WAIT_MS / portTICK_PERIOD_MS);
     std::unique_ptr<Page> page = nullptr;
@@ -93,6 +94,7 @@ void controlTask(void *pvParameter) {
 
 void setup() {
     state = STATE_NEW;
+    preferences.begin("3615_SSH");
 
     xTaskCreatePinnedToCore(controlTask, "control", configSTACK, NULL, (tskIDLE_PRIORITY + 3), NULL, portNUM_PROCESSORS - 1);
     WiFi.begin();
