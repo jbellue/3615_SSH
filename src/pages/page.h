@@ -3,6 +3,9 @@
 
 #include "menuItem.h"
 #include <Minitel1B_Hard.h>
+#include "l10n.h"
+
+extern L10n l10n;
 
 class Page {
 protected:

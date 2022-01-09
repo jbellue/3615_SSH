@@ -36,7 +36,7 @@ MenuItem WiFiMenu::run() {
                 }
                 else { // PAGE_DISCONNECT
                     WiFi.disconnect();
-                    _minitel->println("Déconnexion...");
+                    _minitel->println(l10n.get(L10N_STRINGS::WIFI_PAGE_DISCONNECTING));
                     while(WiFi.isConnected()); // wait for disconnection
                     _state = STATE_NEW;
                 }
@@ -57,7 +57,7 @@ static uint8_t connectionStatus;
 void WiFiMenu::passwordForm() {
     connectionStatus = SYSTEM_EVENT_MAX; // fake unattainable event
     _minitel->moveCursorDown(1);
-    _minitel->println("Mot de passe :");
+    _minitel->println(l10n.get(L10N_STRINGS::WIFI_PAGE_PASSWORD));
     _minitel->print(".");
     _minitel->repeat(39);
     _minitel->moveCursorLeft(40);
@@ -106,19 +106,19 @@ void WiFiMenu::passwordForm() {
     }
     _minitel->moveCursorDown(1);
     _minitel->moveCursorLeft(40);
-    _minitel->println("Connexion...");
+    _minitel->println(l10n.get(L10N_STRINGS::WIFI_PAGE_CONNECTING));
     connectToAP();
 
     while(connectionStatus == SYSTEM_EVENT_MAX); // wait until we get a connection or rejection
     _minitel->moveCursorDown(1);
     if (connectionStatus == SYSTEM_EVENT_STA_GOT_IP) {
-        _minitel->println("Connecté !");
+        _minitel->println(l10n.get(L10N_STRINGS::WIFI_PAGE_CONNECTED));
         _state = STATE_DONE;
         delay(1000);
     }
     else {
-        _minitel->println("Impossible de se connecter.");
-        _minitel->println("Vérifier le mot de passe.");
+        _minitel->println(l10n.get(L10N_STRINGS::WIFI_PAGE_CONNECTION_FAILED));
+        _minitel->println(l10n.get(L10N_STRINGS::WIFI_PAGE_CHECK_PASSWORD));
         delay(2000);
         _minitel->moveCursorUp(7);
         _minitel->clearScreenFromCursor();
@@ -156,7 +156,7 @@ void WiFiMenu::showPage() {
     _minitel->noCursor();
     _minitel->newScreen();
     _minitel->attributs(DOUBLE_HAUTEUR);
-    _minitel->println("MENU WiFi");
+    _minitel->println(l10n.get(L10N_STRINGS::WIFI_PAGE_TITLE));
     _minitel->attributs(GRANDEUR_NORMALE);
 
     // underline the title
@@ -166,26 +166,28 @@ void WiFiMenu::showPage() {
 
     _minitel->moveCursorDown(1);
     if(WiFi.isConnected()) {
-        _minitel->println("Connecté à " + WiFi.SSID());
+        _minitel->print(l10n.get(L10N_STRINGS::WIFI_PAGE_CONNECTED_TO));
+        _minitel->println(WiFi.SSID());
         _minitel->moveCursorDown(1);
-        _minitel->println("1 - Se déconnecter");
+        _minitel->print("1 - ");
+        _minitel->println(l10n.get(L10N_STRINGS::WIFI_PAGE_DISCONNECT));
         _page = PAGE_DISCONNECT;
     }
     else {
-        _minitel->println("Scan en cours...");
+        _minitel->println(l10n.get(L10N_STRINGS::WIFI_PAGE_SCANNING));
         const int16_t n = WiFi.scanNetworks();
         _minitel->moveCursorUp(1);
         if (n == 0) {
-            _minitel->println("Aucun réseau trouvé");
+            _minitel->println(l10n.get(L10N_STRINGS::WIFI_PAGE_NO_NETWORK_FOUND));
             _page = PAGE_NO_NETWORK_FOUND;
         }
         else {
             char buffer[255] = { '\0' };
             if (n == 1) {
-                sprintf(buffer, "1 réseau trouvé :");
+                sprintf(buffer, l10n.get(L10N_STRINGS::WIFI_PAGE_ONE_NETWORK_FOUND).c_str());
             }
             else {
-                sprintf(buffer, "%u réseaux trouvés :", n);
+                sprintf(buffer, "%u %s", n, l10n.get(L10N_STRINGS::WIFI_PAGE_NETWORKS_FOUND).c_str());
             }
             _minitel->moveCursorDown(2);
             _minitel->println(buffer);
@@ -198,7 +200,7 @@ void WiFiMenu::showPage() {
     }
     _minitel->moveCursorDown(1);
     _minitel->cursor();
-    _minitel->print("Choix puis ");
+    _minitel->print(l10n.get(L10N_STRINGS::WIFI_PAGE_CHOICE_THEN));
     _minitel->attributs(INVERSION_FOND);
     _minitel->print("ENVOI");
     _minitel->attributs(FOND_NORMAL);

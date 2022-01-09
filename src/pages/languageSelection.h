@@ -14,13 +14,7 @@ private:
     void showPage();
     void showInput(const int num, const char* title);
 
-    enum Input {
-        INPUT_NONE,
-        INPUT_ENGLISH,
-        INPUT_FRENCH,
-        INPUT_SPANISH
-    };
-    Input getInput();
+    Languages getInput();
 
     enum State {
         STATE_NEW,

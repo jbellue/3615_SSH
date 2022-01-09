@@ -13,9 +13,9 @@ MenuItem LanguageSelection::run() {
         _state = STATE_WAITING_FOR_INPUT;
         break;
     case STATE_WAITING_FOR_INPUT: {
-        Input i = getInput();
-        if (i != INPUT_NONE) {
-            // TODO actually select a language
+        Languages i = getInput();
+        if (i != LANGUAGES_LAST) {
+            l10n.setLanguage(i);
             _minitel->echo(true);
             return MenuItem::MenuOutput_HOME;
         }
@@ -60,16 +60,16 @@ void LanguageSelection::showInput(const int num, const char* title) {
     _minitel->println(title);
 }
 
-LanguageSelection::Input LanguageSelection::getInput() {
+Languages LanguageSelection::getInput() {
     unsigned long key = _minitel->getKeyCode();
     switch (key) {
         case '1':
-            return INPUT_ENGLISH;
+            return ENGLISH;
         case '2':
-            return INPUT_FRENCH;
+            return FRENCH;
         case '3':
-            return INPUT_SPANISH;
+            return SPANISH;
         default:
-            return INPUT_NONE;
+            return LANGUAGES_LAST;
     }
 }

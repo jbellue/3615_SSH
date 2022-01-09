@@ -73,7 +73,7 @@ void SSHPage::showPage() {
     _minitel->noCursor();
     _minitel->newScreen();
     _minitel->attributs(DOUBLE_HAUTEUR);
-    _minitel->println("MENU client SSH");
+    _minitel->println(l10n.get(L10N_STRINGS::SSH_PAGE_TITLE));
     _minitel->attributs(GRANDEUR_NORMALE);
 
     // underline the title
@@ -82,15 +82,15 @@ void SSHPage::showPage() {
     }
 
     _minitel->moveCursorDown(1);
-    _minitel->println("Hôte :");
+    _minitel->println(l10n.get(L10N_STRINGS::SSH_PAGE_HOST));
     _minitel->print(".");
     _minitel->repeat(39);
     _minitel->moveCursorLeft(40);
-    _minitel->println("Nom d'utilisateur :");
+    _minitel->println(l10n.get(L10N_STRINGS::SSH_PAGE_USERNAME));
     _minitel->print(".");
     _minitel->repeat(39);
     _minitel->moveCursorLeft(40);
-    _minitel->println("Mot de passe :");
+    _minitel->println(l10n.get(L10N_STRINGS::SSH_PAGE_PASSWORD));
     _minitel->print(".");
     _minitel->repeat(39);
     _minitel->moveCursorLeft(40);
@@ -198,10 +198,12 @@ void SSHPage::displayBottomMenu() {
     _minitel->attributs(INVERSION_FOND);
     _minitel->print("Sommaire");
     _minitel->attributs(FOND_NORMAL);
-    _minitel->println(" : Options WiFi");
+    _minitel->println(l10n.get(L10N_STRINGS::SSH_PAGE_WIFI_OPTIONS));
+
 
     _minitel->attributs(INVERSION_FOND);
     _minitel->print("Guide");
     _minitel->attributs(FOND_NORMAL);
-    _minitel->println(" : Language");
+    _minitel->println(l10n.get(L10N_STRINGS::SSH_PAGE_LANGUAGE));
+
 }
