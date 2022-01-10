@@ -2,6 +2,7 @@
 #include <WiFi.h>
 #include <Preferences.h>
 #include "l10n.h"
+#include "pages/splash.h"
 #include "pages/WiFiMenu.h"
 #include "pages/sshPage.h"
 #include "pages/languageSelection.h"
@@ -26,7 +27,7 @@ void handleStateNew(Minitel* minitel) {
     vTaskDelay(NET_WAIT_MS / portTICK_PERIOD_MS);
 
     if(WiFi.isConnected()) {
-        newState(STATE_HOME);
+        newState(STATE_SPLASH);
     }
     else {
         unsigned long length = 0;
@@ -35,7 +36,7 @@ void handleStateNew(Minitel* minitel) {
             length = millis() - time;
         }
         if(WiFi.isConnected()) {
-            newState(STATE_HOME);
+            newState(STATE_SPLASH);
         }
         else {
             newState(STATE_WIFI_MENU);
@@ -55,6 +56,9 @@ void controlTask(void *pvParameter) {
         switch(state) {
             case STATE_NEW:
                 handleStateNew(&minitel);
+                break;
+            case STATE_SPLASH:
+                page = std::unique_ptr<Page>(new Splash(&minitel));
                 break;
             case STATE_HOME:
                 page = std::unique_ptr<Page>(new SSHPage(&minitel));

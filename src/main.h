@@ -6,6 +6,7 @@
 
 typedef enum {
     STATE_NEW,
+    STATE_SPLASH,
     STATE_WIFI_MENU,
     STATE_HOME,
     STATE_LANGUAGE
