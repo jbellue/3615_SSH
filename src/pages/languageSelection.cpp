@@ -35,7 +35,7 @@ void LanguageSelection::showTitle() {
     _minitel->noCursor();
     _minitel->newScreen();
     _minitel->attributs(DOUBLE_HAUTEUR);
-    _minitel->println("Langue");
+    _minitel->println(l10n.get(L10N_STRINGS::LANGUAGE_PAGE_TITLE));
     _minitel->attributs(GRANDEUR_NORMALE);
 
     // underline the title

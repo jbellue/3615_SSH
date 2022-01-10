@@ -33,6 +33,8 @@ enum L10N_STRINGS {
     WIFI_PAGE_CONNECTION_FAILED,
     WIFI_PAGE_CHECK_PASSWORD,
 
+    LANGUAGE_PAGE_TITLE,
+
     L10N_LAST_STRING
 };
 
@@ -72,7 +74,8 @@ private:
         { "Connection...",      "Connexion...",         "Connectando..."        },
         { "Connected!",         "Connecté !",           "Connectado!"           },
         { "Connection failed.", "Impossible de se connecter.", "Conexión fallida!"},
-        { "Check password.",    "Vérifier le mot de passe.", "Comprobar la contrasena."}
+        { "Check password.",    "Vérifier le mot de passe.", "Comprobar la contrasena."},
+        { "Language",           "Langue",               "Idioma"                }
     };
 };
 
