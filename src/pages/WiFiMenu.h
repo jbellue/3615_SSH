@@ -8,40 +8,34 @@
 #include <WiFi.h>
 
 
-static uint8_t _connectionRetryCount;
-
 class WiFiMenu : public Page {
 public:
     WiFiMenu(Minitel* m) :
         Page {m},
         _state(STATE_NEW),
-        _input('\0') { _connectionRetryCount = 0; }
+        _input('\0') {}
 
     MenuItem run();
 
 private:
-    void showPage();
-    unsigned long getInput();
-    uint8_t checkInput();
-    void passwordForm();
-    void connectToAP();
-
     enum State {
         STATE_NEW,
-        STATE_WAITING_FOR_INPUT,
-        STATE_CHECK_INPUT,
+        STATE_READY_TO_DISCONNECT,
+        STATE_READY_TO_SCAN_AGAIN,
+        STATE_SELECT_NETWORK,
         STATE_ENTER_PASSWORD,
         STATE_DONE
     };
 
-    enum SubPage {
-        PAGE_DISCONNECT,
-        PAGE_SELECT_NETWORK,
-        PAGE_NO_NETWORK_FOUND
-    };
+    State showPage();
+
+    unsigned long getSSIDSelection();
+    void passwordForm();
+    void connectToAP(const String SSID, const String password);
+
+    static void WiFiEvent(WiFiEvent_t event, WiFiEventInfo_t info);
 
     State _state;
-    SubPage _page;
     String _ssid;
     String _password;
     wifi_auth_mode_t _authMode;
@@ -50,6 +44,5 @@ private:
     char _input;
 };
 
-void WiFiEvent(WiFiEvent_t event, WiFiEventInfo_t info);
 
 #endif
