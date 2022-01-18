@@ -7,7 +7,6 @@
 #include "esp_wifi.h"
 #include <WiFi.h>
 
-
 class WiFiMenu : public Page {
 public:
     WiFiMenu(Minitel* m) :
@@ -43,6 +42,5 @@ private:
 
     char _input;
 };
-
 
 #endif

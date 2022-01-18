@@ -32,6 +32,8 @@ enum L10N_STRINGS {
     WIFI_PAGE_CONNECTED,
     WIFI_PAGE_CONNECTION_FAILED,
     WIFI_PAGE_CHECK_PASSWORD,
+    WIFI_PAGE_TO_SCAN_AGAIN,
+    WIFI_PAGE_GO_BACK,
 
     LANGUAGE_PAGE_TITLE,
 
@@ -63,7 +65,7 @@ private:
         { ": Language",         " : Langue",            ": Idioma"              },
         { "WiFi Options",       "Options WiFi",         "Opciones WiFi"         },
         { "Connected to ",      "Connecté à ",          "Conectado a "          },
-        { "Disconnect",         "Se déconnecter",       "Desconectar"           },
+        { ": disconnect",       " : se déconnecter",    ": desconectar"          },
         { "Scanning...",        "Scan en cours...",     "Escaneando las redes..."},
         { "No network found",   "Aucun réseau trouvé",  "No encontró red"       },
         { "1 network found:",   "1 réseau trouvé :",    "1 red encontrada"      },
@@ -75,6 +77,8 @@ private:
         { "Connected!",         "Connecté !",           "Connectado!"           },
         { "Connection failed.", "Impossible de se connecter.", "Conexión fallida!"},
         { "Check password.",    "Vérifier le mot de passe.", "Comprobar la contrasena."},
+        { " to scan again",     " pour scanner à nouveau", " para volver a escanear"},
+        { ": back",             " : retour",            ": volver"},
         { "Language",           "Langue",               "Idioma"                }
     };
 };

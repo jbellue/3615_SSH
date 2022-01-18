@@ -72,7 +72,7 @@ WiFiMenu::State WiFiMenu::showPage() {
         _minitel->attributs(INVERSION_FOND);
         _minitel->print("SOMMAIRE");
         _minitel->attributs(FOND_NORMAL);
-        _minitel->print(" go back");
+        _minitel->print(l10n.get(L10N_STRINGS::WIFI_PAGE_GO_BACK));
         return STATE_READY_TO_DISCONNECT;
     }
 
@@ -82,11 +82,10 @@ WiFiMenu::State WiFiMenu::showPage() {
     if (n == 0) {
         _minitel->println(l10n.get(L10N_STRINGS::WIFI_PAGE_NO_NETWORK_FOUND));
         _minitel->moveCursorDown(2);
-        _minitel->print("Press ");
         _minitel->attributs(INVERSION_FOND);
         _minitel->print("ENVOI");
         _minitel->attributs(FOND_NORMAL);
-        _minitel->print(" to scan again");
+        _minitel->print(l10n.get(L10N_STRINGS::WIFI_PAGE_TO_SCAN_AGAIN));
         return STATE_READY_TO_SCAN_AGAIN;
     }
 
@@ -97,8 +96,9 @@ WiFiMenu::State WiFiMenu::showPage() {
     else {
         sprintf(buffer, "%hi %s", n, l10n.get(L10N_STRINGS::WIFI_PAGE_NETWORKS_FOUND).c_str());
     }
-    _minitel->moveCursorDown(2);
     _minitel->println(buffer);
+
+    _minitel->moveCursorDown(2);
     for (int16_t i = 0; i < n; ++i) {
         sprintf(buffer, "%i : %s", i+1, WiFi.SSID(i).c_str());
         _minitel->println(buffer);
@@ -121,16 +121,23 @@ unsigned long WiFiMenu::getSSIDSelection() {
         case CORRECTION:
         case ANNULATION:
             _input = '\0';
+            _minitel->print(".");
+            _minitel->moveCursorLeft(1);
             break;
-        case 0:
-        case '\n':
-        case '\t':
-        case ENVOI:
-            // ignore
-            break;
-        default:
+        case '1':
+        case '2':
+        case '3':
+        case '4':
+        case '5':
+        case '6':
+        case '7':
+        case '8':
+        case '9':
             _input = (char)key;
             _minitel->moveCursorLeft(1);
+            break;
+        default:
+            // ignore
             break;
     }
     return key;
@@ -138,7 +145,7 @@ unsigned long WiFiMenu::getSSIDSelection() {
 
 void WiFiMenu::passwordForm() {
     _connectionStatus = SYSTEM_EVENT_MAX; // fake unattainable event
-    _minitel->moveCursorDown(1);
+    _minitel->moveCursorReturn(2);
     _minitel->println(l10n.get(L10N_STRINGS::WIFI_PAGE_PASSWORD));
     _minitel->print(".");
     _minitel->repeat(39);
