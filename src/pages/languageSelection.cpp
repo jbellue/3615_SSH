@@ -31,22 +31,8 @@ MenuItem LanguageSelection::run() {
     return MenuItem::MenuOutput_NONE;
 }
 
-void LanguageSelection::showTitle() {
-    _minitel->noCursor();
-    _minitel->newScreen();
-    _minitel->attributs(DOUBLE_HAUTEUR);
-    _minitel->println(l10n.get(L10N_STRINGS::LANGUAGE_PAGE_TITLE));
-    _minitel->attributs(GRANDEUR_NORMALE);
-
-    // underline the title
-    for (int i = 1; i <= 40; i++) {
-        _minitel->writeByte(0x7E);
-    }
-}
-
-
 void LanguageSelection::showPage() {
-    showTitle();
+    Page::showTitle(l10n.get(L10N_STRINGS::LANGUAGE_PAGE_TITLE));
 
     _minitel->moveCursorDown(1);
     //TODO get a dynamic list of languages

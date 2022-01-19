@@ -10,7 +10,6 @@ public:
     MenuItem run();
 
 private:
-    void showTitle();
     void showPage();
     void showInput(const int num, const char* title);
 

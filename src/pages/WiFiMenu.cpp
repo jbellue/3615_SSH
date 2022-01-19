@@ -49,16 +49,7 @@ MenuItem WiFiMenu::run() {
 }
 
 WiFiMenu::State WiFiMenu::showPage() {
-    _minitel->noCursor();
-    _minitel->newScreen();
-    _minitel->attributs(DOUBLE_HAUTEUR);
-    _minitel->println(l10n.get(L10N_STRINGS::WIFI_PAGE_TITLE));
-    _minitel->attributs(GRANDEUR_NORMALE);
-
-    // underline the title
-    for (int i = 1; i <= 40; i++) {
-        _minitel->writeByte(0x7E);
-    }
+    Page::showTitle(l10n.get(L10N_STRINGS::WIFI_PAGE_TITLE));
 
     if(WiFi.isConnected()) {
         _minitel->print(l10n.get(L10N_STRINGS::WIFI_PAGE_CONNECTED_TO));
