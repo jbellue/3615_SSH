@@ -8,8 +8,6 @@
 #include "pages/languageSelection.h"
 
 #define NET_WAIT_MS 100
-
-
 const unsigned int configSTACK = 51200;
 
 static volatile state_t state;
@@ -26,22 +24,7 @@ void handleStateNew(Minitel* minitel) {
     minitel->smallMode();
     vTaskDelay(NET_WAIT_MS / portTICK_PERIOD_MS);
 
-    if(WiFi.isConnected()) {
-        newState(STATE_SPLASH);
-    }
-    else {
-        unsigned long length = 0;
-        unsigned long time = millis();
-        while (!WiFi.isConnected() && (length < 5000)) {  // Voir p.141
-            length = millis() - time;
-        }
-        if(WiFi.isConnected()) {
-            newState(STATE_SPLASH);
-        }
-        else {
-            newState(STATE_WIFI_MENU);
-        }
-    }
+    newState(STATE_SPLASH);
 }
 
 void controlTask(void *pvParameter) {

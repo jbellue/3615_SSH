@@ -1,3 +1,4 @@
+#include <WiFi.h>
 #include "splash.h"
 #include "splash_img.h"
 
@@ -14,7 +15,20 @@ MenuItem Splash::run() {
         break;
     case STATE_WAITING_FOR_INPUT: {
         if (_minitel->getKeyCode() != 0) {
-            return MenuItem::MenuOutput_HOME;
+            if(WiFi.isConnected()) {
+                return MenuItem::MenuOutput_HOME;
+            }
+            unsigned long length = 0;
+            unsigned long time = millis();
+            while (!WiFi.isConnected() && (length < 5000)) {  // Voir p.141
+                length = millis() - time;
+            }
+            if(WiFi.isConnected()) {
+                return MenuItem::MenuOutput_HOME;
+            }
+            else {
+                return MenuItem::MenuOutput_WIFI_MENU;
+            }
         }
     }
     default:
