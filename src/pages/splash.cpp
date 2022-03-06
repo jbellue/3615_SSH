@@ -14,7 +14,7 @@ MenuItem Splash::run() {
         _state = STATE_WAITING_FOR_INPUT;
         break;
     case STATE_WAITING_FOR_INPUT: {
-        if (_minitel->getKeyCode() != 0) {
+        if (_minitel->getKeyCode() == ENVOI) {
             if(WiFi.isConnected()) {
                 return MenuItem::MenuOutput_HOME;
             }
