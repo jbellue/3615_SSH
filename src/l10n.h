@@ -4,13 +4,16 @@
 #include <WString.h>
 
 enum Languages {
-    ENGLISH,
+    LANGUAGES_FIRST,
+    ENGLISH = LANGUAGES_FIRST,
     FRENCH,
     SPANISH,
 
     LANGUAGES_LAST
 };
 enum L10N_STRINGS {
+    LANGUAGE_NAME,
+
     SSH_PAGE_TITLE,
     SSH_PAGE_HOST,
     SSH_PAGE_USERNAME,
@@ -53,10 +56,14 @@ public:
     String get(const uint16_t index) {
         return languageStore[index][selectedLanguageIndex];
     }
+    String get(const uint16_t index, Languages language) {
+        return languageStore[index][language];
+    }
 private:
     Languages selectedLanguageIndex;
 
     String languageStore[L10N_LAST_STRING][LANGUAGES_LAST] = {
+        { "English",            "Français",             "Espanol"               },
         { "3615 SSH client",    "3615 SSH client",      "3615 SSH client"       },
         { "Host:",              "Hôte :",               "Servidor:"             },
         { "Username:",          "Nom d'utilisateur :",  "Nombre de usuario:"    },

@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 
-uint8_t ghettoAtoi(char c) {
+inline uint8_t ghettoAtoi(char c) {
     return c - '0';
 }
 

@@ -1,4 +1,5 @@
 #include "languageSelection.h"
+#include "utils.h"
 #include <Preferences.h>
 
 LanguageSelection::LanguageSelection(Minitel* m) :
@@ -35,10 +36,10 @@ void LanguageSelection::showPage() {
     Page::showTitle(l10n.get(L10N_STRINGS::LANGUAGE_PAGE_TITLE));
 
     _minitel->moveCursorDown(1);
-    //TODO get a dynamic list of languages
-    showInput(1, "English");
-    showInput(2, "Français");
-    showInput(3, "Espanol");
+
+    for (uint8_t l = LANGUAGES_FIRST; l != LANGUAGES_LAST; ++l) {
+        showInput(l + 1, l10n.get(LANGUAGE_NAME, (Languages)l).c_str());
+    }
 }
 
 void LanguageSelection::showInput(const int num, const char* title) {
@@ -50,15 +51,9 @@ void LanguageSelection::showInput(const int num, const char* title) {
 }
 
 Languages LanguageSelection::getInput() {
-    unsigned long key = _minitel->getKeyCode();
-    switch (key) {
-        case '1':
-            return ENGLISH;
-        case '2':
-            return FRENCH;
-        case '3':
-            return SPANISH;
-        default:
-            return LANGUAGES_LAST;
+    const char key = ghettoAtoi(_minitel->getKeyCode()) - 1;
+    if (key < LANGUAGES_LAST) {
+        return (Languages)key;
     }
+    return LANGUAGES_LAST;
 }
