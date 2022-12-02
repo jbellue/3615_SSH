@@ -3,7 +3,7 @@
 
 #include <string>
 
-static system_event_id_t _connectionStatus;
+static arduino_event_id_t _connectionStatus;
 
 MenuItem WiFiMenu::run() {
     switch (_state) {
@@ -135,7 +135,7 @@ unsigned long WiFiMenu::getSSIDSelection() {
 }
 
 void WiFiMenu::passwordForm() {
-    _connectionStatus = SYSTEM_EVENT_MAX; // fake unattainable event
+    _connectionStatus = ARDUINO_EVENT_MAX; // fake unattainable event
     _minitel->moveCursorReturn(2);
     _minitel->println(l10n.get(L10N_STRINGS::WIFI_PAGE_PASSWORD));
     _minitel->print(".");
@@ -188,11 +188,11 @@ void WiFiMenu::passwordForm() {
     connectToAP(WiFi.SSID(ghettoAtoi(_input) - 1), _password);
 
     // wait until we get a connection or rejection
-    while(!(_connectionStatus == SYSTEM_EVENT_STA_DISCONNECTED || _connectionStatus == SYSTEM_EVENT_STA_GOT_IP)) {
+    while(!(_connectionStatus == ARDUINO_EVENT_WIFI_STA_DISCONNECTED || _connectionStatus == ARDUINO_EVENT_WIFI_STA_GOT_IP)) {
         vTaskDelay(100 / portTICK_PERIOD_MS);
     }
     _minitel->moveCursorDown(1);
-    if (_connectionStatus == SYSTEM_EVENT_STA_GOT_IP) {
+    if (_connectionStatus == ARDUINO_EVENT_WIFI_STA_GOT_IP) {
         _minitel->println(l10n.get(L10N_STRINGS::WIFI_PAGE_CONNECTED));
         _state = STATE_DONE;
         delay(1000);
@@ -215,6 +215,6 @@ void WiFiMenu::connectToAP(const String ssid, const String password) {
     WiFi.begin(ssid.c_str(), password.c_str());
 }
 
-void WiFiMenu::WiFiEvent(system_event_id_t event, WiFiEventInfo_t info) {
+void WiFiMenu::WiFiEvent(arduino_event_id_t event, WiFiEventInfo_t info) {
     _connectionStatus = event;
 }

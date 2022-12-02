@@ -32,7 +32,7 @@ private:
     void passwordForm();
     void connectToAP(const String SSID, const String password);
 
-    static void WiFiEvent(system_event_id_t event, WiFiEventInfo_t info);
+    static void WiFiEvent(arduino_event_id_t event, WiFiEventInfo_t info);
 
     State _state;
     String _ssid;
