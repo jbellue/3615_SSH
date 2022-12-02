@@ -3,7 +3,7 @@
 
 #include <string>
 
-static WiFiEvent_t _connectionStatus;
+static system_event_id_t _connectionStatus;
 
 MenuItem WiFiMenu::run() {
     switch (_state) {
