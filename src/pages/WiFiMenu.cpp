@@ -215,6 +215,6 @@ void WiFiMenu::connectToAP(const String ssid, const String password) {
     WiFi.begin(ssid.c_str(), password.c_str());
 }
 
-void WiFiMenu::WiFiEvent(WiFiEvent_t event, WiFiEventInfo_t info) {
+void WiFiMenu::WiFiEvent(WiFiEvent_t event, system_event_id_t info) {
     _connectionStatus = event;
 }
